@@ -15,15 +15,6 @@ public class HashingComPorao implements EstruturaDeDados{
         poraoIndex = 0;
     }
 
-    private void aumentarPorao() {
-        int[] novoPorao = new int[poraoIndex + (int)(porao/2)];
-        for (int i = 0; i < poraoIndex; i++) {
-            novoPorao[i] = poraoDados[i];
-        }
-        poraoDados = novoPorao;
-        System.out.println("O porão ficou cheio, o tamanho do mesmo foi aumentado para " + poraoDados.length);
-    }
-
     private int identidade(int chave) {
         return chave % tamanho;
     }
@@ -34,11 +25,18 @@ public class HashingComPorao implements EstruturaDeDados{
         if (dados[pos] == 0) {
             dados[pos] = chave;
         } else {
-            if (poraoIndex >= poraoDados.length) {
-                aumentarPorao();
+            if (poraoIndex >= porao) {
+                for (int i = pos; i < tamanho; i++) {
+                    if (dados[i] == 0) {
+                        dados[i] = chave;
+                        break;
+                    }
+                }
+            } else {
+                poraoDados[poraoIndex] = chave;
+                poraoIndex++;
             }
-            poraoDados[poraoIndex] = chave;
-            poraoIndex++;
+            
         }
     }
 
@@ -56,6 +54,14 @@ public class HashingComPorao implements EstruturaDeDados{
                     poraoIndex--;
                 }
             } 
+            if (poraoIndex >= porao) {
+                for (int i = pos; i < tamanho; i++) {
+                    if (dados[i] == chave) {
+                        dados[i] = 0;
+                        break;
+                    }
+                }
+            }
         }        
     }
 
@@ -68,6 +74,13 @@ public class HashingComPorao implements EstruturaDeDados{
             for (int i = 0; i < poraoIndex; i++){
                 if (poraoDados[i] == chave) {
                     return true;
+                }
+            }
+            if (poraoIndex >= porao) {
+                for (int i = pos; i < tamanho; i++) {
+                    if (dados[i] == chave) {
+                        return true;
+                    }
                 }
             }
                 
