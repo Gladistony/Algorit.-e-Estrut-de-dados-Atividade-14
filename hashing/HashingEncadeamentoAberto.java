@@ -4,11 +4,11 @@ import java.util.LinkedList;
 
 public class HashingEncadeamentoAberto implements EstruturaDeDados{
 
-    private No[] dados;
     private static final int tamanho = 1011;
+    private int[] dados;
 
     public HashingEncadeamentoAberto() {
-        dados = new No[tamanho];
+        dados = new int[tamanho];
     }
 
     private int identidade(int chave) {
@@ -18,31 +18,28 @@ public class HashingEncadeamentoAberto implements EstruturaDeDados{
     @Override
     public void insert(int chave) {
         int pos = identidade(chave);
-        No novo = new No(chave);
-        if (dados[pos] == null) {
-            dados[pos] = novo;
+        if (dados[pos] == 0) {
+            dados[pos] = chave;
         } else {
-            No aux = dados[pos];
-            while (aux.proximo != null) {
-                aux = aux.proximo;
+            for (int i = pos; i < tamanho; i++) {
+                if (dados[i] == 0) {
+                    dados[i] = chave;
+                    break;
+                }
             }
-            aux.proximo = novo;
         }
     }
 
     @Override
     public void delete(int chave) {
         int pos = identidade(chave);
-        if (dados[pos] != null) {
-            if (dados[pos].valor == chave) {
-                dados[pos] = dados[pos].proximo;
-            } else {
-                No aux = dados[pos];
-                while (aux.proximo != null && aux.proximo.valor != chave) {
-                    aux = aux.proximo;
-                }
-                if (aux.proximo != null) {
-                    aux.proximo = aux.proximo.proximo;
+        if (dados[pos] == chave) {
+            dados[pos] = 0;
+        } else {
+            for (int i = pos; i < tamanho; i++) {
+                if (dados[i] == chave) {
+                    dados[i] = 0;
+                    break;
                 }
             }
         }
@@ -51,23 +48,16 @@ public class HashingEncadeamentoAberto implements EstruturaDeDados{
     @Override
     public boolean search(int chave) {
         int pos = identidade(chave);
-        No aux = dados[pos];
-        while (aux != null) {
-            if (aux.valor == chave) {
-                return true;
+        if (dados[pos] == chave) {
+            return true;
+        } else {
+            for (int i = pos; i < tamanho; i++) {
+                if (dados[i] == chave) {
+                    return true;
+                }
             }
-            aux = aux.proximo;
         }
         return false;
     }
     
 }
-
-class No {
-    int valor; 
-    No proximo; 
-    public No(int valor) {
-      this.valor = valor;
-      this.proximo = null;
-    }
-  }
