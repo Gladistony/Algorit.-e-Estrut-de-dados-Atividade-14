@@ -5,7 +5,7 @@ import java.util.LinkedList;
 public class HashingEncadeamentoAberto implements EstruturaDeDados{
 
     private No[] dados;
-    private int tamanho = 100;
+    private static final int tamanho = 1011;
 
     public HashingEncadeamentoAberto() {
         dados = new No[tamanho];
